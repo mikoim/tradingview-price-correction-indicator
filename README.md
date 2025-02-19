@@ -2,6 +2,8 @@
 
 A powerful TradingView indicator that displays a comprehensive table showing price corrections from All-Time High (ATH) and the 200-day Simple Moving Average (SMA).
 
+![Correction Table Indicator](./ss.png)
+
 ## Features
 
 - Real-time calculation of 200-day Simple Moving Average (SMA)
