@@ -25,7 +25,7 @@ adj_40 = ath * 0.6  // -40%
 adj_50 = ath * 0.5  // -50%
 
 // Create table
-var table ma_table = table.new(position.top_right, 4, 7, bgcolor=color.rgb(0, 0, 0, 80))
+var table ma_table = table.new(position.top_right, 4, 8, bgcolor=color.rgb(0, 0, 0, 80))
 
 // Function to update table rows
 updateTableRow(table_id, row, label, price, current_price) =>
@@ -45,8 +45,9 @@ if barstate.islast
 
     // Update each row
     updateTableRow(ma_table, 1, "200SMA", ma200, close)
-    updateTableRow(ma_table, 2, "ATH-10%", adj_10, close)
-    updateTableRow(ma_table, 3, "ATH-20%", adj_20, close)
-    updateTableRow(ma_table, 4, "ATH-30%", adj_30, close)
-    updateTableRow(ma_table, 5, "ATH-40%", adj_40, close)
-    updateTableRow(ma_table, 6, "ATH-50%", adj_50, close)
+    updateTableRow(ma_table, 2, "ATH", ath, close)
+    updateTableRow(ma_table, 3, "ATH-10%", adj_10, close)
+    updateTableRow(ma_table, 4, "ATH-20%", adj_20, close)
+    updateTableRow(ma_table, 5, "ATH-30%", adj_30, close)
+    updateTableRow(ma_table, 6, "ATH-40%", adj_40, close)
+    updateTableRow(ma_table, 7, "ATH-50%", adj_50, close)
