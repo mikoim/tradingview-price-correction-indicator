@@ -3,9 +3,12 @@ indicator("Correction Table", overlay=true)
 
 // Parameter Settings
 ath_lookback = input.int(90, "ATH Calculation Period (Days)", minval=1)
+ma_type = input.string("SMA", "Moving Average Type", options=["SMA", "EMA"])
+show_ma200 = input.bool(true, "Show 200-day Moving Average")
+show_table = input.bool(true, "Show Correction Table")
 
 // Calculate 200-day Moving Average
-ma200 = request.security(syminfo.tickerid, "D", ta.sma(close, 200))
+ma200 = request.security(syminfo.tickerid, "D", ma_type == "SMA" ? ta.sma(close, 200) : ta.ema(close, 200))
 
 // Calculate difference between current price and MA200
 price_diff = ma200 - close
@@ -23,9 +26,16 @@ adj_20 = ath * 0.8  // -20%
 adj_30 = ath * 0.7  // -30%
 adj_40 = ath * 0.6  // -40%
 adj_50 = ath * 0.5  // -50%
+adj_60 = ath * 0.4  // -60%
+adj_70 = ath * 0.3  // -70%
+adj_80 = ath * 0.2  // -80%
+adj_90 = ath * 0.1  // -80%
+
+// Plot 200-day Moving Average on chart
+plot(show_ma200 ? ma200 : na, "200-day Moving Average", color=color.rgb(255, 165, 0), linewidth=2)
 
 // Create table
-var table ma_table = table.new(position.top_right, 4, 8, bgcolor=color.rgb(0, 0, 0, 80))
+var table ma_table = table.new(position.top_right, 4, 12, bgcolor=color.rgb(0, 0, 0, 80))
 
 // Function to update table rows
 updateTableRow(table_id, row, label, price, current_price) =>
@@ -37,17 +47,21 @@ updateTableRow(table_id, row, label, price, current_price) =>
     table.cell(table_id, 3, row, str.tostring(diff_percent, "#.##") + "%", text_color = price_diff >= 0 ? color.green : color.red, text_size=size.normal)
 
 // Update table every bar
-if barstate.islast
+if barstate.islast and show_table
     // Header
     table.cell(ma_table, 1, 0, "Price", text_color=color.white, text_size=size.normal)
     table.cell(ma_table, 2, 0, "Deviation", text_color=color.white, text_size=size.normal)
     table.cell(ma_table, 3, 0, "Deviation %", text_color=color.white, text_size=size.normal)
 
     // Update each row
-    updateTableRow(ma_table, 1, "200SMA", ma200, close)
+    updateTableRow(ma_table, 1, "200" + ma_type, ma200, close)
     updateTableRow(ma_table, 2, "ATH", ath, close)
     updateTableRow(ma_table, 3, "ATH-10%", adj_10, close)
     updateTableRow(ma_table, 4, "ATH-20%", adj_20, close)
     updateTableRow(ma_table, 5, "ATH-30%", adj_30, close)
     updateTableRow(ma_table, 6, "ATH-40%", adj_40, close)
     updateTableRow(ma_table, 7, "ATH-50%", adj_50, close)
+    updateTableRow(ma_table, 8, "ATH-60%", adj_60, close)
+    updateTableRow(ma_table, 9, "ATH-70%", adj_70, close)
+    updateTableRow(ma_table, 10, "ATH-80%", adj_80, close)
+    updateTableRow(ma_table, 11, "ATH-90%", adj_90, close)
